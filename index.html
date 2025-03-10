@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITADM Quiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Startseite -->
+    <div id="startseite">
+        <div class="header">
+            <h1>ITADM Quiz</h1>
+            <p class="subtitle">Teste dein IT-Wissen!</p>
+        </div>
+        
+        <div class="hauptmenu">
+            <button class="quiz-kategorie-btn" onclick="loadQuiz('netzwerk')">
+                <i class="fas fa-network-wired"></i> Netzwerk
+            </button>
+            <button class="quiz-kategorie-btn" onclick="loadQuiz('datenschutz')">
+                <i class="fas fa-shield-alt"></i> Datenschutz
+            </button>
+            <button class="quiz-kategorie-btn" onclick="loadQuiz('scripting')">
+                <i class="fas fa-code"></i> Scripting
+            </button>
+            <button class="quiz-kategorie-btn" onclick="loadQuiz('system')">
+                <i class="fas fa-server"></i> Systeme
+            </button>
+            <button class="quiz-kategorie-btn" onclick="loadQuiz('alle')">
+                <i class="fas fa-star"></i> Mega-Quiz
+            </button>
+        </div>
+    </div>
+
+    <!-- Quiz-Seite -->
+    <div id="quizseite">
+        <!-- Navigationsleiste -->
+        <div class="quiz-nav">
+            <button id="restart" class="nav-btn" onclick="restartQuiz()">
+                <i class="fas fa-home"></i>
+            </button>
+        </div>
+
+        <!-- Quiz-Container -->
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h1 id="quiz-title" class="quiz-title"></h1>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div id="progress-text" class="progress-text"></div>
+            </div>
+
+            <!-- Geänderter Abschnitt: "hidden" Klasse entfernt -->
+            <div id="quiz" style="display: none;">
+                <div class="question-card">
+                    <p class="question" id="question"></p>
+                    <div class="options-grid" id="options"></div>
+                </div>
+                
+                <!-- Button immer sichtbar, nur disabled -->
+                <button id="next" class="next-btn" onclick="nextQuestion()" disabled>
+                    Weiter <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <div id="score" class="score-box"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
