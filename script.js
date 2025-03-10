@@ -59,7 +59,7 @@ const quizData = {
         {
             question: "Was gibt die Schleife aus: for(i=1;i<=10;i++) { if ((i<5) && (i>2)) console.log(i+2); }",
             options: ["3,4", "4,5", "5,6", "Keine Ausgabe"],
-            answer: ["4,5"],
+            answer: ["5,6"],
             points: 1
         },
         {
@@ -70,8 +70,8 @@ const quizData = {
         },
         {
             question: "Mit welcher HTML-Anweisung kann ich Javascript-Code in HTML einbetten?",
-            options: ["&lt;title&gt;", "&lt;function&gt;", "&lt;script&gt;", "&lt;head&gt;"],
-            answer: ["&lt;script&gt;"],
+            options: ["<title>;", "<function>;", "<script>;", "<head>;"],
+            answer: ["<script>;"],
             points: 1
         } ],
     system: [ {
