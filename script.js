@@ -659,7 +659,7 @@ const quizData = {
             ],
             answer: [
                 "Digitale Daten können Online und Offline übertragen werden",
-                "Für Online Datenübertragungen ist immer eine Verbindung nötig"
+                "Für Online Datenübertragungen ist immer eine Verbindung nötig",
                 "Offline Datenübertragungen erfolgt immer mit Dateien"
             ],
             points: 3
