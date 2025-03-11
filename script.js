@@ -817,7 +817,7 @@ const categoryMap = {
         icon: "fa-server" 
     },
     alle: { 
-        title: "Alle Themen",
+        title: "Random",
         icon: "fa-star" 
     }
 };
