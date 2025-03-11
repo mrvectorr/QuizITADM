@@ -1,8 +1,221 @@
 let currentQuestionIndex = 0;
 let score = 0;
 let currentQuiz = [];
+let incorrectQuestions = []; // Neue Globalvariable für falsche Fragen
+const QUESTIONS_PER_CATEGORY = 4; // 👈 Neue Konstante
 
 const quizData = {
+    linux: [
+        // Systemboot und Kernel
+        {
+            question: "Welches Programm wird nach dem BIOS während des System-Bootvorgangs ausgeführt?",
+            options: ["Bootloader", "init-Programm", "Kernel"],
+            answer: ["Bootloader"],
+            points: 1
+        },
+        {
+            question: "Was ist der Name der Konfigurationsdatei für den GNU GRUB Bootloader?",
+            options: ["grub.cfg", "grubenv"],
+            answer: ["grub.cfg"],
+            points: 1
+        },
+
+        // Systemd und Runlevel
+        {
+            question: "Mit welchem Befehl können Sie vom graphical.target zum multi-user.target wechseln?",
+            options: ["systemctl isolate multi-user.target", "systemctl isolate graphical.target"],
+            answer: ["systemctl isolate multi-user.target"],
+            points: 1
+        },
+        {
+            question: "Was ist der Zweck von Runlevel 0 in Linux?",
+            options: ["Neustart", "Shutdown (Herunterfahren)", "Graphischer Modus (graphical.target)"],
+            answer: ["Shutdown (Herunterfahren)"],
+            points: 1
+        },
+        {
+            question: "Mit welchem Befehl kann man die Linux-Maschine herunterfahren?",
+            options: ["shutdown", "shutdown -r", "systemctl poweroff", "reboot"],
+            answer: ["shutdown", "systemctl poweroff"],
+            points: 2
+        },
+        {
+            question: "Mit welchem Befehl können Sie die Linux-Maschine neu starten?",
+            options: ["poweroff", "telinit 0", "reboot", "systemctl halt", "shutdown -r"],
+            answer: ["reboot", "shutdown -r"],
+            points: 2
+        },
+
+        // Dateioperationen und Links
+        {
+            question: "Was passiert, wenn die Quelldatei eines symbolischen Links gelöscht wird?",
+            options: [
+                "Der symbolische Link bleibt funktionsfähig",
+                "Der symbolische Link wird als 'broken link' angezeigt",
+                "Der symbolische Link wird automatisch zu einem Hardlink"
+            ],
+            answer: ["Der symbolische Link wird als 'broken link' angezeigt"],
+            points: 1
+        },
+        {
+            question: "Welcher Befehl kann versteckte Dateien und Ordner auflisten?",
+            options: ["ls -l", "ls -la", "ls -lh"],
+            answer: ["ls -la"],
+            points: 1
+        },
+        {
+            question: "Mit welchem Befehl können Sie eine Datei umbenennen?",
+            options: ["cp", "rm", "mv"],
+            answer: ["mv"],
+            points: 1
+        },
+        {
+            question: "Welcher Befehl wird verwendet, um ein Hardlink zu erstellen?",
+            options: ["ls", "ln", "ln -s"],
+            answer: ["ln"],
+            points: 1
+        },
+        {
+            question: "Welcher Befehl wird verwendet, um ein Softlink (symbolischer Link) zu erstellen?",
+            options: ["ls", "ln", "ln -s"],
+            answer: ["ln -s"],
+            points: 1
+        },
+        {
+            question: "Welcher Befehl wird verwendet, um Dateien zu löschen?",
+            options: ["delete", "rm", "erase"],
+            answer: ["rm"],
+            points: 1
+        },
+        {
+            question: "Welcher Befehl wird verwendet, um leere Verzeichnisse zu löschen?",
+            options: ["rdir", "remove", "rmdir"],
+            answer: ["rmdir"],
+            points: 1
+        },
+        {
+            question: "Welcher Befehl wird verwendet, um den Inhalt von Verzeichnissen aufzulisten?",
+            options: ["mkdir", "ln", "ls"],
+            answer: ["ls"],
+            points: 1
+        },
+        {
+            question: "Mit welchem Befehl können Sie Dateien/Ordner verschieben?",
+            options: ["mv", "cp", "rm -rf"],
+            answer: ["mv"],
+            points: 1
+        },
+        {
+            question: "Mit welchem Befehl können Sie Dateien/Ordner kopieren?",
+            options: ["mv", "cp", "rm -rf"],
+            answer: ["cp"],
+            points: 1
+        },
+
+        // Archivierung und Kompression
+        {
+            question: "Welcher Befehl wird verwendet, um Dateien/Ordner zu archivieren?",
+            options: ["tar -cf", "tar -tvf", "tar -xvf"],
+            answer: ["tar -cf"],
+            points: 1
+        },
+        {
+            question: "Welcher Befehl wird verwendet, um Archive zu extrahieren?",
+            options: ["tar -cf", "tar -tvf", "tar -xvf"],
+            answer: ["tar -xvf"],
+            points: 1
+        },
+        {
+            question: "Welcher Befehl wird verwendet, um Archive zu komprimieren?",
+            options: ["gzip", "gunzip", "tar -cf"],
+            answer: ["gzip"],
+            points: 1
+        },
+        {
+            question: "Welcher Befehl wird verwendet, um komprimierte Archive zu extrahieren?",
+            options: ["gzip", "gunzip", "tar -cf"],
+            answer: ["gunzip"],
+            points: 1
+        },
+
+        // Berechtigungen und Prozesse
+        {
+            question: "Was bedeutet der Befehl chmod 775 datei?",
+            options: [
+                "User/Group/Others: rwx/rwx/rw-",
+                "User/Group/Others: rwx/rwx/r-x",
+                "User/Group/Others: rwx/rwx/r--"
+            ],
+            answer: ["User/Group/Others: rwx/rwx/r-x"],
+            points: 1
+        },
+        {
+            question: "Mit welchem Befehl kann man einen Prozess beenden?",
+            options: ["renice", "nice", "kill"],
+            answer: ["kill"],
+            points: 1
+        },
+        {
+            question: "Welcher Befehl wird verwendet, um den 'Niceness'-Wert eines Prozesses zu ändern?",
+            options: ["renice -10 -p 2398", "nice -10 2398", "kill 2398"],
+            answer: ["renice -10 -p 2398"],
+            points: 1
+        },
+        {
+            question: "Mit dem Befehl jobs kann man:",
+            options: [
+                "Prozesse, die der angemeldete Benutzer gestartet hat, auflisten",
+                "Prozesse beenden",
+                "Den 'Niceness'-Wert eines Prozesses ändern"
+            ],
+            answer: ["Prozesse, die der angemeldete Benutzer gestartet hat, auflisten"],
+            points: 1
+        },
+
+        // Verschiedenes
+        {
+            question: "Mit welchem Befehl wird eine Umgebungsvariable bekannt gemacht?",
+            options: ["export", "unset"],
+            answer: ["export"],
+            points: 1
+        },
+        {
+            question: "Wie werden Umgebungsvariablen standardmäßig geschrieben?",
+            options: ["Großgeschrieben", "Kleingeschrieben"],
+            answer: ["Großgeschrieben"],
+            points: 1
+        },
+        {
+            question: "Was bedeutet #!/bin/bash in einem Skript?",
+            options: ["Shebang", "Hashbang", "Shehash"],
+            answer: ["Shebang"],
+            points: 1
+        },
+
+        // Geschichte
+        {
+            question: "In welchem Jahr begann die Entwicklung von UNIX?",
+            options: ["1991", "1960", "1969"],
+            answer: ["1969"],
+            points: 1
+        },
+
+        // Paketverwaltung (YUM)
+        {
+            question: "Welche Optionen können mit dem yum-Befehl verwendet werden, um das System zu aktualisieren?",
+            options: ["install", "update", "upgrade", "check-update"],
+            answer: ["update", "upgrade"],
+            points: 2
+        },
+
+        // Datei-Vergleich
+        {
+            question: "Mit diff können zwei Dateien verglichen werden. Auf welcher Basis erfolgt der Vergleich?",
+            options: ["Byte für Byte", "Zeile für Zeile"],
+            answer: ["Zeile für Zeile"],
+            points: 1
+        }
+    ],
     scripting: [ {
             question: "Eine Scriptsprache wird in ausführbaren Code übersetzt vom...",
             options: ["Compiler", "Interpreter", "Mikroprozessor"],
@@ -423,41 +636,317 @@ const quizData = {
             answer: ["Der Datenschutzbeauftragte haftet für Fehler in der Beratung, wenn er seine Aufgaben grob fahrlässig oder vorsätzlich verletzt."],
             points: 1
         } ],
+    itgrundlagen: [
+        {
+            question: "Was sind analoge Daten Speichermedien? (leicht, 2 Punkte)",
+            options: [
+                "Schallplatten",
+                "Festplatten",
+                "Fotoabzüge",
+                "USB-Sticks"
+            ],
+            answer: ["Schallplatten", "Fotoabzüge"],
+            points: 2
+        },
+        {
+            question: "Welche Aussagen zur digitalen Datenübertragung sind richtig? (mittel, 3 Punkte)",
+            options: [
+                "Digitale Daten können Online und Offline übertragen werden",
+                "Daten können nicht über Netzwerke (LAN's) übertragen werden",
+                "Für Online Datenübertragungen ist immer eine Verbindung nötig",
+                "Offline Datenübertragungen erfolgt immer mit Dateien",
+                "Digitalen Daten lassen sich nicht übertragen"
+            ],
+            answer: [
+                "Digitale Daten können Online und Offline übertragen werden",
+                "Für Online Datenübertragungen ist immer eine Verbindung nötig"
+            ],
+            points: 3
+        },
+        {
+            question: "Welche Aufgaben hat ein Betriebssystem? (mittel, 2 Punkte)",
+            options: [
+                "Intuitive Bedienbarkeit",
+                "Verwaltung der internen und externen Hardwarekomponenten",
+                "Bereitstellung von Social Media Netzwerken",
+                "Steuerung der System- und Anwendungs-Programme"
+            ],
+            answer: [
+                "Verwaltung der internen und externen Hardwarekomponenten",
+                "Steuerung der System- und Anwendungs-Programme"
+            ],
+            points: 2
+        },
+        {
+            question: "Welche Aussagen über Algorithmen sind richtig? (leicht, 2 Punkte)",
+            options: [
+                "Algorithmen können von Computern verarbeitet werden",
+                "In der realen Arbeitswelt gibt es keine Algorithmen",
+                "Algorithmen sind nur ein theoretisches Konstrukt der IT",
+                "Algorithmen definieren die Arbeitsweise von Programmen"
+            ],
+            answer: [
+                "Algorithmen können von Computern verarbeitet werden",
+                "Algorithmen definieren die Arbeitsweise von Programmen"
+            ],
+            points: 2
+        },
+        {
+            question: "Wie heißen die drei booleschen Grundoperatoren? (leicht, 3 Punkte)",
+            options: [
+                "OR",
+                "XOR",
+                "NOT",
+                "AND"
+            ],
+            answer: ["OR", "NOT", "AND"],
+            points: 3
+        },
+        {
+            question: "Welche Zahlen sind korrekt? (leicht, 2 Punkte)",
+            options: [
+                "Hexadezimal 0A2F",
+                "Hexadezimal 123G",
+                "Oktal 1827",
+                "Binär 10101010"
+            ],
+            answer: ["Hexadezimal 0A2F", "Binär 10101010"],
+            points: 2
+        },
+        {
+            question: "Wie heißen die Betriebssystem Architekturmodelle? (mittel, 2 Punkte)",
+            options: [
+                "Zwiebelmodell",
+                "Schichtenmodell",
+                "Orangenmodell",
+                "Schalenmodell"
+            ],
+            answer: ["Schichtenmodell", "Schalenmodell"],
+            points: 2
+        },
+        {
+            question: "Welche Hypervisor Architektur wird meistens für Servervirtualisierung verwendet? (leicht, 1 Punkt)",
+            options: [
+                "VLAN",
+                "Hosted",
+                "Bare Metal"
+            ],
+            answer: ["Bare Metal"],
+            points: 1
+        },
+        {
+            question: "Welche elektronischen Bauteile werden in modernen Computern verwendet? (mittel, 2 Punkte)",
+            options: [
+                "Röhren",
+                "Relais",
+                "Transistoren",
+                "Mikroprozessoren"
+            ],
+            answer: ["Transistoren", "Mikroprozessoren"],
+            points: 2
+        },
+        {
+            question: "Welche Aussagen über Bytes sind korrekt? (mittel, 2 Punkte)",
+            options: [
+                "Ein Byte hat 13 Bit",
+                "Ein Byte hat 8 Bit",
+                "Ein Kibibyte sind 1.000 Byte",
+                "Ein Megabyte sind 1.000.000 Byte"
+            ],
+            answer: [
+                "Ein Byte hat 8 Bit",
+                "Ein Megabyte sind 1.000.000 Byte"
+            ],
+            points: 2
+        },
+    ],
     alle: []
 };
 
-quizData.alle = [...quizData.scripting, ...quizData.system, ...quizData.netzwerk, ...quizData.datenschutz];
+// 1. Hilfsfunktionen für Zufallsauswahl
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
 
-function loadQuiz(quizId) {
-    currentQuiz = quizId === 'alle' 
-        ? [...quizData.alle] 
-        : [...quizData[quizId]];
+function getRandomQuestions(category, count) {
+    const availableQuestions = [...quizData[category]];
+    return shuffleArray(availableQuestions).slice(0, Math.min(count, availableQuestions.length));
+}
+
+// 2. Dynamische Aktualisierung der Mega-Quiz Fragen
+function updateMegaQuiz() {
+    quizData.alle = [];
+    const categories = ['itgrundlagen', 'linux', 'netzwerk', 'datenschutz', 'scripting', 'system'];
     
+    categories.forEach(category => {
+        const randomQuestions = getRandomQuestions(category, QUESTIONS_PER_CATEGORY);
+        quizData.alle.push(...randomQuestions);
+    });
+    
+    quizData.alle = shuffleArray(quizData.alle);
+}
+
+// categoryMap vor loadQuiz definieren
+const categoryMap = {
+    itgrundlagen: { 
+        title: "IT-Grundlagen", 
+        icon: "fa-laptop-code" 
+    },
+    linux: { 
+        title: "Linux", 
+        icon: "fa-terminal" 
+    },
+    netzwerk: { 
+        title: "Netzwerk", 
+        icon: "fa-network-wired" 
+    },
+    datenschutz: { 
+        title: "Datenschutz", 
+        icon: "fa-shield-alt" 
+    },
+    scripting: { 
+        title: "Scripting", 
+        icon: "fa-code" 
+    },
+    system: { 
+        title: "Systeme", 
+        icon: "fa-server" 
+    },
+    alle: { 
+        title: "Mega-Quiz (Alle Themen)",
+        icon: "fa-star" 
+    }
+};
+
+// 3. Modifizierte loadQuiz-Funktion
+function loadQuiz(quizId) {
+    if (!categoryMap[quizId]) {
+        alert("Ungültige Quiz-Kategorie!");
+        restartQuiz();
+        return;
+    }
+
+    // Mega-Quiz: Neue Zufallsfragen generieren
+    if (quizId === 'alle') {
+        updateMegaQuiz();
+        currentQuiz = [...quizData.alle];
+    } else {
+        currentQuiz = [...quizData[quizId]];
+    }
+
+    if (currentQuiz.length === 0) {
+        alert("Keine Fragen verfügbar!");
+        restartQuiz();
+        return;
+    }
+
+    // Reset Variablen
     currentQuestionIndex = 0;
     score = 0;
+    incorrectQuestions = [];
+
+    // UI Initialisierung
+    const category = categoryMap[quizId];
+    document.getElementById('quiz-title').innerHTML = `
+        <i class="fas ${category.icon}"></i>
+        ${category.title}
+    `;
     
     document.getElementById('startseite').style.display = 'none';
     document.getElementById('quizseite').style.display = 'block';
     document.getElementById('quiz').style.display = 'block';
     
-    document.getElementById('quiz-title').textContent = quizId === 'alle' 
-        ? "Mega-Quiz (Alle Themen)" 
-        : document.querySelector(`button[onclick="loadQuiz('${quizId}')"]`).textContent;
-
-    document.getElementById("progress-bar").style.width = "0%";
-    document.getElementById("score").textContent = `Punktestand: ${score}`;
-    
+    // Progress zurücksetzen
+    updateProgress();
     loadQuestion();
 }
 
+// 4. Überarbeitete nextQuestion-Funktion
+function nextQuestion() {
+    const selected = Array.from(document.querySelectorAll('input:checked'))
+                         .map(input => input.parentElement.querySelector('span').textContent.trim());
+    
+    const currentQuestion = currentQuiz[currentQuestionIndex];
+    const isCorrect = checkAnswer(selected, currentQuestion.answer);
+
+    // Falsche Frage merken
+    if (!isCorrect) {
+        incorrectQuestions.push(currentQuestion);
+    }
+
+    // Visuelles Feedback
+    showAnswerFeedback(currentQuestion.answer);
+
+    // Verzögerung vor nächster Frage
+    setTimeout(() => {
+        currentQuestionIndex++;
+        
+        if (currentQuestionIndex < currentQuiz.length) {
+            loadQuestion();
+        } else {
+            handleQuizCompletion();
+        }
+    }, 1000);
+}
+
+function checkAnswer(selected, correctAnswers) {
+    return selected.length === correctAnswers.length &&
+           selected.every(a => correctAnswers.includes(a)) &&
+           correctAnswers.every(a => selected.includes(a));
+}
+
+function showAnswerFeedback(correctAnswers) {
+    document.querySelectorAll('.option').forEach(label => {
+        const spanText = label.querySelector('span').textContent.trim();
+        label.classList.remove('correct', 'incorrect');
+        
+        if (correctAnswers.includes(spanText)) {
+            label.classList.add('correct');
+        }
+        if (label.querySelector('input').checked && !correctAnswers.includes(spanText)) {
+            label.classList.add('incorrect');
+        }
+    });
+}
+
+// 5. Neue Funktion für Quiz-Abschluss
+function handleQuizCompletion() {
+    if (incorrectQuestions.length > 0) {
+        // Wiederhole falsche Fragen
+        currentQuiz = [...incorrectQuestions];
+        incorrectQuestions = [];
+        currentQuestionIndex = 0;
+        alert(`⚠️ ${currentQuiz.length} falsche Fragen werden wiederholt!`);
+        updateProgress();
+        loadQuestion();
+    } else {
+        // Quiz wirklich beenden
+        const maxPoints = currentQuiz.reduce((sum, q) => sum + q.points, 0);
+        alert(`🎉 Quiz beendet!\nPunktestand: ${score}/${maxPoints}`);
+        restartQuiz();
+    }
+}
+
+// 6. Modifizierte loadQuestion mit Wiederholungs-Markierung
 function loadQuestion() {
     const question = currentQuiz[currentQuestionIndex];
     const optionsDiv = document.getElementById("options");
     
+    // Fragekarte zurücksetzen
     optionsDiv.innerHTML = "";
     document.getElementById("next").disabled = true;
     document.getElementById("question").textContent = question.question;
 
+    // Markierung für wiederholte Fragen
+    const questionCard = document.querySelector('.question-card');
+    questionCard.classList.toggle('repeated-question', 
+        incorrectQuestions.some(q => q.question === question.question));
+
+    // Optionen erstellen
     question.options.forEach((option, index) => {
         const label = document.createElement("label");
         label.className = "option";
@@ -475,60 +964,26 @@ function loadQuestion() {
         label.htmlFor = input.id;
 
         input.addEventListener('change', () => {
-            const hasSelection = document.querySelectorAll('input:checked').length > 0;
-            document.getElementById("next").disabled = !hasSelection;
+            document.getElementById("next").disabled = 
+                document.querySelectorAll('input:checked').length === 0;
         });
 
         optionsDiv.appendChild(label);
     });
 
+    updateProgress();
+}
+
+// 7. Progress-Update Funktion
+function updateProgress() {
     const progress = ((currentQuestionIndex + 1) / currentQuiz.length) * 100;
     document.getElementById("progress-bar").style.width = `${progress}%`;
     document.getElementById("progress-text").textContent = 
         `${Math.round(progress)}% abgeschlossen (Frage ${currentQuestionIndex + 1}/${currentQuiz.length})`;
-}
-
-function nextQuestion() {
-    const selected = Array.from(document.querySelectorAll('input:checked'))
-                         .map(input => input.parentElement.querySelector('span').textContent.trim());
-    
-    const correctAnswers = currentQuiz[currentQuestionIndex].answer;
-    
-    // Validierung
-    const isCorrect = selected.length === correctAnswers.length &&
-                      correctAnswers.every(a => selected.includes(a)) &&
-                      selected.every(a => correctAnswers.includes(a));
-
-    // Visuelles Feedback
-    document.querySelectorAll('.option').forEach(label => {
-        const spanText = label.querySelector('span').textContent.trim();
-        label.classList.remove('correct', 'incorrect');
-        
-        if (correctAnswers.includes(spanText)) {
-            label.classList.add('correct');
-        } 
-        if (label.querySelector('input').checked && !correctAnswers.includes(spanText)) {
-            label.classList.add('incorrect');
-        }
-    });
-
-    // Punkte berechnen
-    if (isCorrect) score += currentQuiz[currentQuestionIndex].points;
     document.getElementById("score").textContent = `Punktestand: ${score}`;
-
-    // Nächste Frage oder Ende
-    setTimeout(() => {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < currentQuiz.length) {
-            loadQuestion();
-        } else {
-            const maxPoints = currentQuiz.reduce((sum, q) => sum + q.points, 0);
-            alert(`Quiz beendet!\nEndstand: ${score} von ${maxPoints} Punkten`);
-            restartQuiz();
-        }
-    }, 2000);
 }
 
+// 8. Restart-Funktion erweitert
 function restartQuiz() {
     document.getElementById('startseite').style.display = 'block';
     document.getElementById('quizseite').style.display = 'none';
@@ -537,4 +992,5 @@ function restartQuiz() {
     document.getElementById("progress-text").textContent = "";
     currentQuestionIndex = 0;
     score = 0;
+    incorrectQuestions = [];
 }
