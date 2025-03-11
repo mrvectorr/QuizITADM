@@ -817,7 +817,7 @@ const categoryMap = {
         icon: "fa-server" 
     },
     alle: { 
-        title: "Mega-Quiz (Alle Themen)",
+        title: "Alle Themen",
         icon: "fa-star" 
     }
 };
