@@ -895,7 +895,7 @@ function nextQuestion() {
         } else {
             handleQuizCompletion();
         }
-    }, 1000);
+    }, 1500);
 }
 
 function checkAnswer(selected, correctAnswers) {
