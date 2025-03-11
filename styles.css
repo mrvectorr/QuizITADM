@@ -127,8 +127,9 @@ body {
     background: #202020;
     border-radius: 16px;
     padding: 2rem;
-    margin: 1rem 0;
+    margin: 1rem auto;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    max-width: 800px; /* Zentriert auf PC */
 }
 
 /* Progress-Bar */
@@ -329,11 +330,17 @@ body {
     }
 
     .quiz-container {
-        padding: 1.5rem;
+        max-width: 100%;
+        margin: 0;
+        border-radius: 0;
+        padding: 1rem;
+        min-height: 100vh;
     }
 
     .question-card {
-        padding: 1.5rem;
+        margin: 1rem 0;
+        padding: 1rem;
+        border-radius: 8px;
     }
 
     .options-grid {
@@ -342,6 +349,12 @@ body {
 }
 
 @media (max-width: 480px) {
+    /* Alles in EINER Media Query zusammenfassen */
+    #startseite,
+    #quizseite {
+        padding: 0.5rem;
+    }
+
     .header h1 {
         font-size: 1.8rem;
     }
@@ -351,8 +364,16 @@ body {
         font-size: 1rem;
     }
 
+    .quiz-container {
+        padding: 0.5rem;
+    }
+
     .question {
         font-size: 1.2rem;
+    }
+
+    .question-card {
+        padding: 0.8rem;
     }
 
     .option {
