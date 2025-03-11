@@ -873,6 +873,11 @@ function nextQuestion() {
     const currentQuestion = currentQuiz[currentQuestionIndex];
     const isCorrect = checkAnswer(selected, currentQuestion.answer);
 
+    // Punkte hinzufügen, wenn Antwort korrekt
+    if (isCorrect) {
+        score += currentQuestion.points;
+    }
+
     // Falsche Frage merken
     if (!isCorrect) {
         incorrectQuestions.push(currentQuestion);
