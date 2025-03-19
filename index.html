@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ITADM Quiz</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Startseite -->
+    <div id="startseite">
+        <div class="header">
+            <h1>ITADM Quiz</h1>
+            <p class="subtitle">Teste dein IT-Wissen!</p>
+        </div>
+        
+        <div class="hauptmenu">
+            <button class="quiz-kategorie-btn" data-quiz-id="itgrundlagen">
+                <i class="fas fa-laptop-code"></i> IT-Grundlagen
+            </button>
+            
+            <button class="quiz-kategorie-btn" data-quiz-id="windows">
+                <i class="fas fa-desktop"></i> Windows
+            </button>
+
+            <button class="quiz-kategorie-btn" data-quiz-id="linux">
+                <i class="fas fa-terminal"></i> Linux
+            </button>
+            
+            <button class="quiz-kategorie-btn" data-quiz-id="netzwerk">
+                <i class="fas fa-network-wired"></i> Netzwerk
+            </button>
+            
+            <button class="quiz-kategorie-btn" data-quiz-id="datenschutz">
+                <i class="fas fa-shield-alt"></i> Datenschutz
+            </button>
+            
+            <button class="quiz-kategorie-btn" data-quiz-id="scripting">
+                <i class="fas fa-code"></i> Scripting
+            </button>
+            
+            <button class="quiz-kategorie-btn" data-quiz-id="system">
+                <i class="fas fa-server"></i> Systeme
+            </button>
+            
+            <button class="quiz-kategorie-btn" data-quiz-id="alle">
+                <i class="fas fa-star"></i> Random 
+            </button>
+        </div>
+    </div>
+
+    <!-- Quiz-Seite -->
+    <div id="quizseite" style="display: none;">
+    <div class="quiz-header">
+        <h2 id="quiz-title"></h2>
+        <button class="home-btn" onclick="restartQuiz()">
+            <i class="fas fa-home"></i>
+        </button>
+        <p id="progress-text">
+            <span id="progress-percent">Fortschritt: 0%</span>
+            <span id="score">Punkte: 0/0</span>
+        </p>
+        <div class="progress-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+    </div>
+        
+        <div id="quiz">
+            <div id="question"></div>
+            <div id="options" class="options-grid"></div>
+        </div>
+        
+        <button id="next" class="next-btn" onclick="nextQuestion()" disabled>Weiter</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
